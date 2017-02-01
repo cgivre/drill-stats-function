@@ -24,6 +24,7 @@ import org.apache.drill.exec.expr.annotations.Workspace;
 import org.apache.drill.exec.expr.holders.Float8Holder;
 
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 
 @FunctionTemplate(
@@ -39,18 +40,18 @@ public class MedianFunction implements DrillAggFunc {
     Float8Holder out;
 
     @Workspace
-    java.util.PriorityQueue minHeap;
+    PriorityQueue minHeap;
 
     @Workspace
-    java.util.PriorityQueue maxHeap;
+    PriorityQueue maxHeap;
 
     @Workspace
     double median;
 
     @Override
     public void setup() {
-        java.util.PriorityQueue minHeap=new java.util.PriorityQueue();
-        java.util.PriorityQueue maxHeap=new java.util.PriorityQueue(11, new MyComparator());
+        minHeap=new java.util.PriorityQueue();
+        maxHeap=new java.util.PriorityQueue(11, new MyComparator());
         median = 0;
     }
 
