@@ -16,10 +16,6 @@ package org.apache.drill.contrib.function;
  * limitations under the License.
  */
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.DrillBuf;
 import org.apache.drill.exec.expr.DrillAggFunc;
 import org.apache.drill.exec.expr.annotations.FunctionTemplate;
@@ -31,7 +27,6 @@ import org.apache.drill.exec.expr.holders.IntHolder;
 import org.apache.drill.exec.expr.holders.ObjectHolder;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Comparator;
 
 
@@ -47,7 +42,7 @@ public class DrillStatsFunctions {
 
         @Output
         Float8Holder out;
-        
+
         @Workspace
         Float8Holder median;
 
@@ -59,12 +54,6 @@ public class DrillStatsFunctions {
 
         @Workspace
         IntHolder counter;
-
-        @Workspace
-        IntHolder minSize;
-
-        @Workspace
-        IntHolder maxSize;
 
         @Inject
         DrillBuf buffer;
@@ -167,35 +156,7 @@ public class DrillStatsFunctions {
             maxStackHolder.obj = maxHeap;
 
         }
-
-        /**
-         * Convert object to JSON String
-         * @param object
-         * @return
-         * @throws JsonGenerationException
-         * @throws JsonMappingException
-         * @throws java.io.IOException
-         */
-        public static String fromJavaToJson(java.io.Serializable object)
-            throws JsonGenerationException, JsonMappingException, java.io.IOException {
-            ObjectMapper jsonMapper = new ObjectMapper();
-            return jsonMapper.writeValueAsString(object);
-        }
-
-        /**
-         * Convert a JSON string to an object
-         * @param json
-         * @return
-         * @throws JsonParseException
-         * @throws JsonMappingException
-         * @throws IOException
-         */
-        public static Object fromJsonToJava(String json, Class type) throws JsonParseException,
-            JsonMappingException, IOException {
-            ObjectMapper jsonMapper = new ObjectMapper();
-            return jsonMapper.readValue(json, type);
-        }
-
+        
         public class MyComparator implements Comparator<Double> {
             public int compare(Double x, Double y) {
                 return (int) (y.doubleValue() - x.doubleValue());
