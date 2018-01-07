@@ -1,3 +1,5 @@
 org/apache/drill/contrib/function/DrillStatsFunctions$MedianFunction.class
+org/apache/drill/contrib/function/KendallTauFunction.class
 org/apache/drill/contrib/function/DrillStatsFunctions$MedianFunction$MyComparator.class
+org/apache/drill/contrib/function/DrillStatsFunctions$PCorrelation.class
 org/apache/drill/contrib/function/DrillStatsFunctions.class

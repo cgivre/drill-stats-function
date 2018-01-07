@@ -32,6 +32,8 @@ import java.util.Comparator;
 
 
 public class DrillStatsFunctions {
+  private DrillStatsFunctions() {
+  }
 
   @FunctionTemplate(name = "median",
       scope = FunctionTemplate.FunctionScope.POINT_AGGREGATE,
@@ -172,7 +174,7 @@ public class DrillStatsFunctions {
       nulls = FunctionTemplate.NullHandling.INTERNAL
   )
 
-  public class PCorrelation implements DrillAggFunc {
+  public static class PCorrelation implements DrillAggFunc {
 
     @Param
     NullableFloat8Holder xInput;
