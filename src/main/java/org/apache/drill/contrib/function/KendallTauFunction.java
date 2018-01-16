@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -14,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.drill.contrib.function;
 
 import org.apache.drill.exec.expr.DrillAggFunc;
@@ -27,7 +27,7 @@ import org.apache.drill.exec.expr.holders.IntHolder;
 @FunctionTemplate(
     name = "kendall_correlation",
     scope = FunctionTemplate.FunctionScope.POINT_AGGREGATE,
-    nulls = FunctionTemplate.NullHandling.NULL_IF_NULL
+    nulls = FunctionTemplate.NullHandling.INTERNAL
 )
 
 public class KendallTauFunction implements DrillAggFunc {
@@ -59,29 +59,37 @@ public class KendallTauFunction implements DrillAggFunc {
   public void add() {
     double xValue = xInput.value;
     double yValue = yInput.value;
+    //if( xInput.isSet == 1 && yInput.isSet == 1 ){
+      if (n.value > 0) {
+        if ((xValue > prevXValue.value && yValue > prevYValue.value) || (xValue < prevXValue.value && yValue < prevYValue.value)) {
+          concordantPairs.value = concordantPairs.value + 1;
+        } else if ((xValue > prevXValue.value && yValue < prevYValue.value) || (xValue < prevXValue.value && yValue > prevYValue.value)) {
+          discordantPairs.value = discordantPairs.value + 1;
+        } else {
+          //Tie...
+        }
 
-    if (n.value > 0) {
-      if ((xValue > prevXValue.value && yValue > prevYValue.value) || (xValue < prevXValue.value && yValue < prevYValue.value)) {
-        concordantPairs.value = concordantPairs.value + 1;
+        prevXValue.value = xInput.value;
+        prevYValue.value = yInput.value;
         n.value = n.value + 1;
-      } else if ((xValue > prevXValue.value && yValue < prevYValue.value) || (xValue < prevXValue.value && yValue > prevYValue.value)) {
-        discordantPairs.value = discordantPairs.value + 1;
+
+      } else if(n.value == 0){
+        prevXValue.value = xValue;
+        prevYValue.value = yValue;
         n.value = n.value + 1;
-      } else {
-        //Tie...
       }
+
     }
-  }
+  //}
 
   @Override
   public void setup() {
-    concordantPairs.value = 0;
-    discordantPairs.value = 0;
-    n.value = 0;
   }
 
   @Override
   public void reset() {
+    prevXValue.value = 0;
+    prevYValue.value = 0;
     concordantPairs.value = 0;
     discordantPairs.value = 0;
     n.value = 0;
@@ -89,7 +97,7 @@ public class KendallTauFunction implements DrillAggFunc {
 
   @Override
   public void output() {
-    double result = 0;
+    double result = 0.0;
     result = (concordantPairs.value - discordantPairs.value) / (0.5 * n.value * (n.value - 1));
     tau.value = result;
   }

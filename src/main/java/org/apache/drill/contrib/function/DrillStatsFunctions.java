@@ -16,18 +16,13 @@ package org.apache.drill.contrib.function;
  * limitations under the License.
  */
 
-import io.netty.buffer.DrillBuf;
 import org.apache.drill.exec.expr.DrillAggFunc;
 import org.apache.drill.exec.expr.annotations.FunctionTemplate;
 import org.apache.drill.exec.expr.annotations.Output;
 import org.apache.drill.exec.expr.annotations.Param;
 import org.apache.drill.exec.expr.annotations.Workspace;
-import org.apache.drill.exec.expr.holders.Float8Holder;
-import org.apache.drill.exec.expr.holders.NullableFloat8Holder;
-import org.apache.drill.exec.expr.holders.IntHolder;
-import org.apache.drill.exec.expr.holders.ObjectHolder;
+import org.apache.drill.exec.expr.holders.*;
 
-import javax.inject.Inject;
 import java.util.Comparator;
 
 
@@ -57,12 +52,6 @@ public class DrillStatsFunctions {
 
     @Workspace
     IntHolder counter;
-
-    @Inject
-    DrillBuf buffer;
-
-    @Inject
-    DrillBuf buffer1;
 
     @Override
     public void setup() {
@@ -183,25 +172,25 @@ public class DrillStatsFunctions {
     NullableFloat8Holder yInput;
 
     @Workspace
-    IntHolder numValues;
+    NullableIntHolder numValues;
 
     @Workspace
-    Float8Holder xSum;
+    NullableFloat8Holder xSum;
 
     @Workspace
-    Float8Holder ySum;
+    NullableFloat8Holder ySum;
 
     @Workspace
-    Float8Holder xSqSum;
+    NullableFloat8Holder xSqSum;
 
     @Workspace
-    Float8Holder ySqSum;
+    NullableFloat8Holder ySqSum;
 
     @Workspace
-    Float8Holder xySum;
+    NullableFloat8Holder xySum;
 
     @Output
-    Float8Holder output;
+    NullableFloat8Holder output;
 
     public void setup() {
       // Initialize values
@@ -226,7 +215,7 @@ public class DrillStatsFunctions {
     public void add() {
 
       // Only proceed if both floats aren't nulls
-      if ((xInput.isSet == 1) || (yInput.isSet == 1)) {
+      if ((xInput.isSet == 1) && (yInput.isSet == 1)) {
         numValues.value++;
 
         xSum.value += xInput.value;
