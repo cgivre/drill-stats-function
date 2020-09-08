@@ -21,8 +21,11 @@ import org.apache.drill.exec.expr.annotations.FunctionTemplate;
 import org.apache.drill.exec.expr.annotations.Output;
 import org.apache.drill.exec.expr.annotations.Param;
 import org.apache.drill.exec.expr.annotations.Workspace;
-import org.apache.drill.exec.expr.holders.*;
-
+import org.apache.drill.exec.expr.holders.Float8Holder;
+import org.apache.drill.exec.expr.holders.NullableFloat8Holder;
+import org.apache.drill.exec.expr.holders.NullableIntHolder;
+import org.apache.drill.exec.expr.holders.ObjectHolder;
+import org.apache.drill.exec.expr.holders.IntHolder;
 import java.util.Comparator;
 
 
@@ -243,5 +246,4 @@ public class DrillStatsFunctions {
       output.value = (n * xy - x * y) / (Math.sqrt(n * x2 - x * x) * Math.sqrt(n * y2 - y * y));
     }
   }
-
 }

@@ -24,6 +24,7 @@ import org.apache.drill.exec.expr.annotations.Workspace;
 import org.apache.drill.exec.expr.holders.Float8Holder;
 import org.apache.drill.exec.expr.holders.IntHolder;
 
+
 @FunctionTemplate(
     name = "kendall_correlation",
     scope = FunctionTemplate.FunctionScope.POINT_AGGREGATE,
@@ -78,7 +79,6 @@ public class KendallTauFunction implements DrillAggFunc {
         prevYValue.value = yValue;
         n.value = n.value + 1;
       }
-
     }
   //}
 
